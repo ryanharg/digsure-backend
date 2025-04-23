@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoute = require('./auth.route');
-const config = require('../../config/config');
+const logger = require('../../config/logger');
+
 
 const router = express.Router();
 router.use('/auth', authRoute);
