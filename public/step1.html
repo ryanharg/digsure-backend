@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Step 1: Draw Your Area</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Step 1: Draw Your Area</h1>
+  <p>Click on the map to draw your area boundary.</p>
+
+  <div id="step-1" class="step-content">
+    <div id="map" style="height: 500px; width: 100%; border: 1px solid #ccc;"></div>
+    <div id="polygon-info" style="margin-top: 10px;"></div>
+
+    <button onclick="window.location.href='step2.html'" class="next-btn">Next</button>
+
+  </div>
+
+  <script src="script.js"></script>
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3OUI9b9FF7ySbIsSQZTRU71mOw2kSqj4&libraries=drawing,geometry"
+    async defer
+    
+  ></script>
+  <script>
+    window.onload = function () {
+        initDrawingMap();
+        setupNavigation();
+    };
+</script>
+</body>
+</html>

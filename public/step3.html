@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Step 3: Choose Turnaround & Extras</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <script>
+    function initMiniMap() {
+      const miniMapContainer = document.getElementById("mini-map");
+      const polygonData = JSON.parse(localStorage.getItem("polygonData"));
+
+      if (!miniMapContainer || !polygonData || !Array.isArray(polygonData.coordinates)) {
+        console.warn("Mini map: Invalid polygon data or container.");
+        return;
+      }
+
+      const mapCenter = polygonData.coordinates[0] || { lat: 51.5074, lng: -0.1278 };
+
+      const miniMap = new google.maps.Map(miniMapContainer, {
+        center: mapCenter,
+        zoom: 14,
+        disableDefaultUI: true,
+      });
+
+      const polygon = new google.maps.Polygon({
+        paths: polygonData.coordinates,
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35,
+      });
+
+      polygon.setMap(miniMap);
+    }
+
+    function calculateTotal() {
+      const service = JSON.parse(localStorage.getItem('selectedService'));
+      let basePrice = 0;
+
+      if (service && service.fixedPrice) {
+        basePrice = service.fixedPrice;
+      } else {
+        const polygon = JSON.parse(localStorage.getItem('polygonData'));
+        if (polygon && polygon.area) {
+          basePrice = parseFloat(polygon.area) * 50;
+        }
+      }
+
+      let extras = 0;
+      const turnaround = document.querySelector('input[name="turnaround"]:checked');
+      if (turnaround) {
+        extras += parseFloat(turnaround.dataset.price);
+      }
+
+      document.querySelectorAll('.addon:checked').forEach(opt => {
+        extras += parseFloat(opt.dataset.price);
+      });
+
+      const total = basePrice + extras;
+      document.getElementById('cost-output').textContent = `£${total.toFixed(2)} (Total)`;
+      localStorage.setItem('calculatedPrice', total);
+    }
+
+    function handleNext() {
+      // Removed login check as users are now already logged in
+      window.location.href = 'step4.html';
+    }
+
+    function initPage() {
+      initMiniMap();
+      calculateTotal();
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3OUI9b9FF7ySbIsSQZTRU71mOw2kSqj4&libraries=drawing,geometry" async defer onload="initPage()"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Digsure</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="orders.html">My Orders</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Step 3: Choose Turnaround & Extras</h1>
+
+    <div class="mini-map-container">
+      <h3>Your Selected Area</h3>
+      <div id="mini-map" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <h3>Turnaround Time</h3>
+    <label><input type="radio" name="turnaround" value="24h" data-price="237" onchange="calculateTotal()"> 24 Hour (+£237)</label><br>
+    <label><input type="radio" name="turnaround" value="3d" data-price="142" onchange="calculateTotal()"> 3 Day (+£142)</label><br>
+    <label><input type="radio" name="turnaround" value="10d" data-price="104" onchange="calculateTotal()"> 10 Day (+£104)</label><br>
+
+    <h3>Additional Options</h3>
+    <label><input type="checkbox" class="addon" value="vodafone" data-price="20" onchange="calculateTotal()"> Vodafone (+£20)</label><br>
+    <label><input type="checkbox" class="addon" value="virgin" data-price="20" onchange="calculateTotal()"> Virgin Media (+£20)</label><br>
+    <label><input type="checkbox" class="addon" value="council" data-price="20" onchange="calculateTotal()"> Local Councils (+£20)</label><br>
+
+    <h3>Estimated Total Cost</h3>
+    <p id="cost-output">Calculating...</p>
+
+    <button class="prev-btn" onclick="window.location.href='step2.html'">← Back</button>
+    <button class="next-btn" onclick="handleNext()">Next →</button>
+  </main>
+
+  <button id="supportButton">Need Help?</button>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2: Choose a Service</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Mini-Map Function (directly in HTML)
+        window.initMiniMap = function() {
+            setTimeout(() => {
+                const miniMapContainer = document.getElementById('mini-map');
+                if (!miniMapContainer) {
+                    console.warn('Mini-map container not found!');
+                    return;
+                }
+
+                const storedPolygon = JSON.parse(localStorage.getItem('polygonData'));
+                if (!storedPolygon || !storedPolygon.coordinates) {
+                    console.warn('No polygon data found for mini-map.');
+                    miniMapContainer.innerHTML = '<p>No area drawn yet. Please draw an area on Step 1.</p>';
+                    return;
+                }
+
+                const miniMap = new google.maps.Map(miniMapContainer, {
+                    center: storedPolygon.coordinates[0] || { lat: 51.5074, lng: -0.1278 }, // Default to London
+                    zoom: 14,
+                    disableDefaultUI: true
+                });
+
+                const polygon = new google.maps.Polygon({
+                    paths: storedPolygon.coordinates,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.35
+                });
+
+                polygon.setMap(miniMap);
+            }, 1000); // Wait 1 second before loading the mini-map
+        };
+    </script>
+    <script 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3OUI9b9FF7ySbIsSQZTRU71mOw2kSqj4&libraries=drawing,geometry"
+    async defer onload="initMiniMap()">
+</script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Digsure</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="orders.html">My Orders</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Step 2: Choose a Service</h1>
+        <label>
+            <input type="radio" name="service" value="Full Utility Records Search" data-price="140" onclick="storeService('Full Utility Records Search', 140)">
+            Full Utility Records Search - £140
+        </label>
+        <label>
+            <input type="radio" name="service" value="Basic Utility Records Search" data-price="45" onclick="storeService('Basic Utility Records Search', 45)">
+            Basic Utility Records Search - £45
+        </label>
+        <div class="mini-map-container">
+            <h3>Your Selected Area</h3>
+            <div id="mini-map"></div>
+        </div>
+        <button class="prev-btn" onclick="window.location.href='step1.html'">← Back</button>
+        <button class="next-btn" onclick="window.location.href='step3.html'">Next →</button>
+    </main>
+
+    <button id="supportButton">Need Help?</button>
+
+    <script src="script.js"></script>
+</body>
+</html>

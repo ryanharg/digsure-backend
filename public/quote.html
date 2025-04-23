@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digsure - Quote</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Digsure</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="orders.html">My Orders</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Request a New Quote</h1>
+    <button onclick="startNewQuote()">New Quote</button>
+  </main>
+
+  <script>
+    function startNewQuote() {
+      localStorage.setItem('postLoginRedirect', 'step1.html');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

@@ -57,3 +57,12 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
 };
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  
+  if (email === 'info@digsure.co.uk' && password === 'password') {
+    return res.json({ message: 'Login successful!' });
+  } else {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+};
