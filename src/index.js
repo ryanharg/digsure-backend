@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const config = require('../../config/config');
-
-
+const config = require('./config/config');
 const app = express();
 const apiRoutes = require('./routes/v1'); // Assuming this is the correct path
 
